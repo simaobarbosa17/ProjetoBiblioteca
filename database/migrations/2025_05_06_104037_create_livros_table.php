@@ -15,13 +15,12 @@ return new class extends Migration {
             $table->id();
             $table->string('isbn');
             $table->string('nome');
-            $table->unsignedBigInteger('editora_id'); // Aqui deve ser a chave estrangeira para 'editoras'
+            $table->unsignedBigInteger('editora_id');
             $table->text('bibliografia');
             $table->string('capa');
             $table->decimal('preco', 8, 2);
             $table->timestamps();
 
-            // Definir a chave estrangeira
             $table->foreign('editora_id')->references('id')->on('editoras')->onDelete('cascade');
         });
     }

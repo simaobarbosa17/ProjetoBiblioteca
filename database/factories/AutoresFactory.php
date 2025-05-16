@@ -24,8 +24,8 @@ class AutoresFactory extends Factory
             'autor4.png',
         ];
         return [
-            'nome' => Crypt::encryptString($this->faker->firstName()),
-            'foto' => Crypt::encryptString('storage/app/public/autor/' . $this->faker->randomElement($autores)),
+            'nome' => $this->faker->firstName(),
+            'foto' => 'storage/app/public/autor/' . $this->faker->randomElement($autores),
         ];
     }
 }

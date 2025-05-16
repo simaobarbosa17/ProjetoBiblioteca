@@ -26,12 +26,12 @@ class LivrosFactory extends Factory
             'livro4.jpg',
         ];
         return [
-            'isbn' => Crypt::encryptString($this->faker->isbn13()),
-            'nome' => Crypt::encryptString($this->faker->sentence(1)),
+            'isbn' => $this->faker->isbn13(),
+            'nome' => $this->faker->sentence(1),
             'editora_id' => Editoras::factory(),
-            'bibliografia' => Crypt::encryptString($this->faker->paragraphs(1, true)),
-            'capa' => Crypt::encryptString('storage/app/public/capas/' . $this->faker->randomElement($capas)),
-            'preco' => Crypt::encryptString($this->faker->randomFloat(2, 10, 200)),
+            'bibliografia' => $this->faker->paragraphs(1, true),
+            'capa' => 'storage/capas/' . $this->faker->randomElement($capas),
+            'preco' => $this->faker->randomFloat(2, 10, 200),
         ];
     }
 }

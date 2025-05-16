@@ -24,8 +24,8 @@ class EditorasFactory extends Factory
             'logo4.png',
         ];
         return [
-            'nome' => Crypt::encryptString($this->faker->company()),
-            'logótipo' => Crypt::encryptString('storage/app/public/logo/' . $this->faker->randomElement($logos)),
+            'nome' => $this->faker->company(),
+            'logótipo' => 'storage/app/public/logo/' . $this->faker->randomElement($logos),
         ];
     }
 }
