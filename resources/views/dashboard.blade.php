@@ -55,13 +55,13 @@
                                     <td class="py-3 px-3 max-w-xs">
                                         <div class="tooltip tooltip-left" data-tip="{{ $livros->bibliografia }}">
                                             <div class="text-sm whitespace-pre-line">
-                                                {!! nl2br(e($livros->bibliografia)) !!}
+                                                {{ Str::limit($livros->bibliografia, 150, '...') }}
                                             </div>
                                         </div>
                                     </td>
                                     <td class="py-3 px-3 flex justify-center items-center">
                                          <img src="{{ asset($livros->capa) }}" 
-                                            alt="Capa do livro" width="160" height="200"
+                                            alt="Capa do livro" width="200" height="240"
                                             class="object-contain shadow-sm border border-gray-200">
                                     </td>
                                     <td class="py-3 px-3 text-center font-medium">

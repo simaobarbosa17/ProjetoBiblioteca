@@ -7,6 +7,10 @@ use App\Models\Autores;
 use App\Models\Editoras;
 use App\Models\Livros;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class LivroController extends Controller
 {
@@ -148,5 +152,101 @@ class LivroController extends Controller
         $livro = Livros::findOrFail($id);
         $livro->delete();
         return redirect()->route('admin.dashboard')->with('success', 'Livro removido com sucesso.');
+    }
+
+    public function formImportarGoogle(Request $request)
+    {
+        $query = $request->input('q', 'Laravel');
+        $page = max(1, (int) $request->input('page', 1));
+        $maxResults = 10;
+        $startIndex = ($page - 1) * $maxResults;
+
+        $response = Http::get('https://www.googleapis.com/books/v1/volumes', [
+            'q' => $query,
+            'startIndex' => $startIndex,
+            'maxResults' => $maxResults,
+        ]);
+
+        $livros = [];
+        $totalItems = 0;
+
+        if ($response->successful()) {
+            $data = $response->json();
+            $livros = $data['items'] ?? [];
+            $totalItems = $data['totalItems'] ?? 0;
+        }
+
+        $totalPages = min(5, ceil($totalItems / $maxResults));
+
+        return view('admin.importarlivro', compact('livros', 'query', 'page', 'totalPages'));
+    }
+
+
+    public function salvarLivroGoogle(Request $request)
+    {
+
+
+        DB::beginTransaction();
+
+        try {
+            $isbn = $request->input('isbn');
+            $nome = $request->input('nome');
+            $capa = $request->input('capa');
+            $bibliografia = $request->input('bibliografia');
+            $autoresString = $request->input('autores');
+
+            if (empty($nome)) {
+                throw new \Exception('Nome do livro é obrigatório');
+            }
+            $nomePadrao = 'Editora Padrão';
+
+            $editoras = Editoras::all();
+            $editora = $editoras->first(function ($editora) use ($nomePadrao) {
+                return $editora->nome === $nomePadrao;
+            });
+
+            if (!$editora) {
+                $editora = Editoras::create([
+                    'nome' => 'Editora Padrão',
+                    'logótipo' => 'storage/app/public/logo/default.png',
+                ]);
+            }
+
+
+            $livro = Livros::create([
+                'isbn' => $isbn,
+                'nome' => $nome,
+                'bibliografia' => $bibliografia,
+                'capa' => $capa,
+                'preco' => 0.00,
+                'editora_id' => $editora->id,
+            ]);
+
+            if (!empty($autoresString)) {
+                $autoresNomes = explode(',', $autoresString);
+                $autorIds = [];
+                foreach ($autoresNomes as $nomeAutor) {
+                    $nomeAutor = trim($nomeAutor);
+                    if (empty($nomeAutor))
+                        continue;
+
+                    $autor = Autores::firstOrCreate(
+                        ['nome' => $nomeAutor],
+                        ['foto' => 'storage/app/public/autor/default.png']
+                    );
+                    $autorIds[] = $autor->id;
+                }
+
+                $livro->autores()->sync($autorIds);
+            }
+
+            DB::commit();
+
+            return redirect()->route('admin.dashboard')->with('success', 'Livro importado com sucesso!');
+        } catch (\Exception $e) {
+            DB::rollback();
+            Log::error('Erro ao importar livro: ' . $e->getMessage(), ['exception' => $e]);
+            return back()->with('error', 'Erro ao importar: ' . $e->getMessage());
+        }
     }
 }

@@ -55,6 +55,10 @@ Route::middleware(['auth', 'admin'])
         Route::get('/criaradmin', [AdminController::class, 'create'])->name('criaradmin');
         Route::post('/store', [AdminController::class, 'store'])->name('store');
         Route::get('/todasrequesicoes', [ClienteController::class, 'index'])->name('todasrequesicoes');
+
+        //GoogleBooksApi
+        Route::get('/importar', [LivroController::class, 'formImportarGoogle'])->name('importarlivro.form');
+        Route::post('/importar/salvar', [LivroController::class, 'salvarLivroGoogle'])->name('importarlivro.salvar');
     });
 
 

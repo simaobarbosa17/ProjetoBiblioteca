@@ -16,9 +16,12 @@
                         <button type="submit" class="btn btn-primary">Procurar</button>
                     </form>
                 </div>
-                <div class="mb-4 text-right">
+                <div class="mb-4 text-right flex justify-end gap-3">
                     <a href="{{ route('admin.livros.create') }}" class="btn btn-success">
                         ➕ Inserir Livro
+                    </a>
+                    <a href="{{ route('admin.importarlivro.form') }}" class="btn btn-info">
+                        📥 Importar Livro
                     </a>
                 </div>
                 <div class="overflow-x-auto">
@@ -44,7 +47,6 @@
                                 <th class="py-2 px-3 text-center">Capa</th>
                                 <th class="py-2 px-3 text-center">{!! sortLink('Preço(€)', 'preco') !!}</th>
                                 <th class="py-2 px-3 text-center"></th>
-                                <th class="py-2 px-3 text-center"></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -61,7 +63,7 @@
                                     <td class="py-3 px-3 max-w-xs">
                                         <div class="tooltip tooltip-left" data-tip="{{ $livros->bibliografia }}">
                                             <div class="text-sm whitespace-pre-line">
-                                                {!! nl2br(e($livros->bibliografia)) !!}
+                                                {{ Str::limit($livros->bibliografia, 100, '...') }}
                                             </div>
                                         </div>
                                     </td>
@@ -73,21 +75,21 @@
                                     <td class="py-3 px-3 text-center font-medium">
                                         {{$livros->preco}}
                                     </td>
-                                    <td class=" py-3 px-3 flex flex-col sm:flex-row justify-center items-center gap-2">
-                                        <a href="{{ route('admin.livros.edit', $livros->id) }}"
+                                    <td class="py-3 px-3 text-center">
+                                        <div class="flex justify-center gap-2">
+                                            <a href="{{ route('admin.livros.edit', $livros->id) }}"
                                             class="btn btn-sm btn-warning">
                                             ✏️ Editar
-                                        </a>
-                                    </td>
-                                    <td>
-                                        <form action="{{ route('admin.livros.destroy', $livros->id) }}" method="POST"
-                                            onsubmit="return confirm('Tem certeza que deseja remover este livro?')">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-error">
+                                            </a>
+                                            <form action="{{ route('admin.livros.destroy', $livros->id) }}" method="POST"
+                                                onsubmit="return confirm('Tem certeza que deseja remover este livro?')">
+                                                @csrf
+                                                @method('DELETE')
+                                               <button type="submit" class="btn btn-sm btn-error">
                                                 🗑️ Remover
                                             </button>
-                                        </form>
+                                            </form>
+                                        </div>
                                     </td>
                                 </tr>
                             @endforeach
