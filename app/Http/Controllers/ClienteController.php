@@ -47,7 +47,7 @@ class ClienteController extends Controller
      */
     public function show()
     {
-        $requisicoes = auth()->user()->requisicoes()->with('livro')->latest()->paginate(10);
+        $requisicoes = auth()->user()->requisicoes()->with('livro', 'review')->latest()->paginate(10);
         foreach ($requisicoes as $r) {
             if (Carbon::parse($r->data_entrega)->isTomorrow()) {
 
@@ -55,11 +55,11 @@ class ClienteController extends Controller
             }
         }
         $ativas = $requisicoes->filter(function ($r) {
-            return Carbon::parse($r->data_entrega)->isToday() || Carbon::parse($r->data_entrega)->isFuture();
+            return Carbon::parse($r->data_entrega)->isFuture();
         });
 
         $naoAtivas = $requisicoes->filter(function ($r) {
-            return Carbon::parse($r->data_entrega)->isPast() && !Carbon::parse($r->data_entrega)->isToday();
+            return Carbon::parse($r->data_entrega)->isToday() || Carbon::parse($r->data_entrega)->isPast();
         });
 
         return view('verequesicao', compact('ativas', 'naoAtivas'));

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Aoo\Models\Review;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Crypt;
@@ -102,4 +103,14 @@ class Livros extends Model
     {
         return $this->belongsToMany(Autores::class, 'livros_autores');
     }
+
+    public function requesicoes()
+    {
+        return $this->hasMany(\App\Models\requesicoes::class, 'livros_id');
+    }
+    public function reviews()
+    {
+        return $this->hasMany(Reviews::class, 'livros_id');
+    }
+
 }

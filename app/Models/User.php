@@ -10,6 +10,7 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
 use App\Models\requesicoes;
+use App\Models\Reviews;
 
 class User extends Authenticatable
 {
@@ -69,5 +70,9 @@ class User extends Authenticatable
     public function requisicoes()
     {
         return $this->hasMany(requesicoes::class, 'user_id');
+    }
+    public function reviews()
+    {
+        return $this->hasMany(Reviews::class);
     }
 }

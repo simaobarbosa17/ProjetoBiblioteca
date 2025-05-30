@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Reviews;
 
 class requesicoes extends Model
 {
@@ -26,5 +27,9 @@ class requesicoes extends Model
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+    public function review()
+    {
+        return $this->hasOne(Reviews::class, 'requesicoes_id');
     }
 }

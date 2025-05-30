@@ -73,6 +73,12 @@
                                             📚 Requisitar
                                         </a>
                                     </td>
+                                     <td class="py-3 px-3 text-center">
+                                        <a href="{{ route('detalhelivro.show', $livros->id) }}"
+                                            class="btn btn-sm btn-primary">
+                                            🔍 Detalhes
+                                        </a>
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>

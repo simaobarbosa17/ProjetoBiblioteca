@@ -14,16 +14,19 @@ class ReqSeeder extends Seeder
     {
         requesicoes::create([
             'user_id' => 2,
-            'livros_id' => 27,
+            'livros_id' => 1,
             'data_requisicao' => now()->subDays(2),
-            'data_entrega' => now()->addDay(),
+            'data_entrega' => now(),
         ]);
 
         requesicoes::create([
             'user_id' => 2,
-            'livros_id' => 25,
+            'livros_id' => 2,
             'data_requisicao' => now()->subDays(2),
             'data_entrega' => now(),
         ]);
+
+
+
     }
 }

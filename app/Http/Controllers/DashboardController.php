@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\livro_notificacoes;
+use App\Models\requesicoes;
 use Illuminate\Http\Request;
 
 use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Livros;
 
 class DashboardController extends Controller
@@ -50,5 +52,80 @@ class DashboardController extends Controller
         $view = $request->is('admin/*') ? 'admin.dashboard' : 'dashboard';
 
         return view($view, ['livro' => $paginacao]);
+    }
+    public function show($livro)
+    {
+        $livro = Livros::with([
+            'editora',
+            'autores',
+            'reviews' => function ($query) {
+                $query->where('validado', true)->with('user');
+            }
+        ])->findOrFail($livro);
+
+
+        $livro->disponivel = !requesicoes::where('livros_id', $livro->id)
+            ->whereDate('data_entrega', '>=', now())
+            ->exists();
+
+        $user = Auth::user();
+
+        $notificado = false;
+
+        if ($user) {
+            $notificado = livro_notificacoes::where('user_id', $user->id)
+                ->where('livros_id', $livro->id)
+                ->where('notificado', false)
+                ->exists();
+        }
+
+        $todosLivros = Livros::all()->except($livro->id);
+        $descrBase = $this->limparTexto($livro->bibliografia);
+
+        $relacionados = $todosLivros->map(function ($outro) use ($descrBase) {
+            $descrOutro = $this->limparTexto($outro->bibliografia);
+            $similaridade = $this->calcularSimilaridade($descrBase, $descrOutro);
+            $outro->similaridade = $similaridade;
+            return $outro;
+        })->sortByDesc('similaridade')->take(3);
+
+
+        return view('detalhelivro', compact('livro', 'notificado', 'relacionados'));
+    }
+    public function notificar($livroId)
+    {
+        $livro = Livros::findOrFail($livroId);
+
+
+        $existe = livro_notificacoes::where('livros_id', $livro->id)
+            ->where('user_id', auth()->id())
+            ->where('notificado', false)
+            ->exists();
+
+        if (!$existe) {
+            livro_notificacoes::create([
+                'livros_id' => $livro->id,
+                'user_id' => auth()->id(),
+                'notificado' => false,
+            ]);
+        }
+
+        return back()->with('success', 'Serás notificado quando o livro estiver disponível.');
+    }
+    private function limparTexto($texto)
+    {
+        return collect(explode(' ', strtolower(strip_tags($texto))))
+            ->reject(fn($word) => in_array($word, ['de', 'a', 'o', 'e', 'em', 'um', 'para', 'com', 'do', 'na', 'no', 'por', 'que', 'as', 'os']))
+            ->map(fn($w) => trim(preg_replace('/[^a-z0-9]/', '', $w)))
+            ->filter()
+            ->values()
+            ->toArray();
+    }
+
+    private function calcularSimilaridade(array $base, array $comparar)
+    {
+        $intersecao = array_intersect($base, $comparar);
+        $union = array_unique(array_merge($base, $comparar));
+        return count($union) > 0 ? count($intersecao) / count($union) : 0;
     }
 }

@@ -11,6 +11,8 @@ use App\Http\Controllers\EditorasController;
 use App\Http\Controllers\LivroController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ClienteController;
+use App\Http\Controllers\AdminReviewController;
+use App\Http\Controllers\ReviewsController;
 
 
 
@@ -34,6 +36,7 @@ Route::middleware(['auth', 'admin'])
         Route::get('/livros/{livro}/edit', [LivroController::class, 'edit'])->name('livros.edit');
         Route::put('/livros/{livro}', [LivroController::class, 'update'])->name('livros.update');
         Route::delete('/livros/{livro}', [LivroController::class, 'destroy'])->name('livros.destroy');
+        Route::get('/livrodetalhe/{livro}', [LivroController::class, 'show'])->name('detalhelivroadmin.show');
 
         // Editoras
         Route::get('/editoras', [EditorasController::class, 'index'])->name('editoras');
@@ -59,6 +62,11 @@ Route::middleware(['auth', 'admin'])
         //GoogleBooksApi
         Route::get('/importar', [LivroController::class, 'formImportarGoogle'])->name('importarlivro.form');
         Route::post('/importar/salvar', [LivroController::class, 'salvarLivroGoogle'])->name('importarlivro.salvar');
+
+        //Review
+        Route::get('/reviews', [AdminReviewController::class, 'index'])->name('reviews');
+        Route::patch('/reviews/{id}/aprovar', [AdminReviewController::class, 'aprovar'])->name('reviews.aprovar');
+        Route::patch('/admin/reviews/{id}/recusar', [AdminReviewController::class, 'recusar'])->name('reviews.recusar');
     });
 
 
@@ -74,4 +82,10 @@ Route::middleware([
     Route::get('/requisicoes/{livro}', [RequesicoesController::class, 'show'])->name('requisicoes.show');
     Route::post('/requisicoes', [RequesicoesController::class, 'store'])->name('requisicoes.store');
     Route::get('/verequesicao', [ClienteController::class, 'show'])->name('verequesicao');
+    Route::get('/livrodetalhe/{livro}', [DashboardController::class, 'show'])->name('detalhelivro.show');
+    Route::post('/reviews', [ReviewsController::class, 'store'])->name('reviews.store');
+    Route::post('/livro/{livro}/notificar', [DashboardController::class, 'notificar'])->name('livro.notificar');
+
+
+
 });

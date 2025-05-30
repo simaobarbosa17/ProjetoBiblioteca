@@ -9,7 +9,7 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="overflow-x-auto">
                 <div class="mb-4">
-                    <form action="{{ route('dashboard') }}" method="GET" class="flex flex-col sm:flex-row gap-4 w-full">
+                    <form action="{{ route('admin.dashboard') }}" method="GET" class="flex flex-col sm:flex-row gap-4 w-full">
                         <input type="text" name="procurar" value="{{ request('procurar') }}"
                             placeholder="Procurar por nome, ISBN, editora ou autor"
                             class="input input-bordered w-full" />
@@ -89,6 +89,10 @@
                                                 🗑️ Remover
                                             </button>
                                             </form>
+                                             <a href="{{ route('admin.detalhelivroadmin.show', $livros->id) }}"
+                                            class="btn btn-sm btn-primary">
+                                            🔍 Detalhes
+                                            </a>
                                         </div>
                                     </td>
                                 </tr>

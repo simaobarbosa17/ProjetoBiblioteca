@@ -81,9 +81,11 @@ class LivroController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($livroId)
     {
-        //
+        $livro = Livros::with(['editora', 'requesicoes.user'])->findOrFail($livroId);
+        return view('admin.detalhelivroadmin', compact('livro'));
+
     }
 
     /**
