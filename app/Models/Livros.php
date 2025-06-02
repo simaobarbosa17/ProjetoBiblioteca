@@ -112,5 +112,9 @@ class Livros extends Model
     {
         return $this->hasMany(Reviews::class, 'livros_id');
     }
+    public function carrinho()
+    {
+        return $this->hasMany(carrinho::class, 'livros_id');
+    }
 
 }

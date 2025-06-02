@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\carrinho;
 use App\Models\livro_notificacoes;
 use App\Models\requesicoes;
 use Illuminate\Http\Request;
@@ -71,13 +72,24 @@ class DashboardController extends Controller
         $user = Auth::user();
 
         $notificado = false;
+        $nocarrinho = false;
+        $jaSolicitado = false;
 
         if ($user) {
             $notificado = livro_notificacoes::where('user_id', $user->id)
                 ->where('livros_id', $livro->id)
                 ->where('notificado', false)
                 ->exists();
+             $jaSolicitado = requesicoes::where('user_id', $user->id)
+                ->where('livros_id', $livro->id)
+                ->whereDate('data_entrega', '>=', now())
+                ->exists();
+            $nocarrinho = carrinho::where('user_id', $user->id)
+                ->where('livros_id', $livro->id)
+                ->exists();
         }
+
+        
 
         $todosLivros = Livros::all()->except($livro->id);
         $descrBase = $this->limparTexto($livro->bibliografia);
@@ -89,8 +101,9 @@ class DashboardController extends Controller
             return $outro;
         })->sortByDesc('similaridade')->take(3);
 
+        
 
-        return view('detalhelivro', compact('livro', 'notificado', 'relacionados'));
+        return view('detalhelivro', compact('livro', 'notificado', 'relacionados', 'nocarrinho', 'jaSolicitado'));
     }
     public function notificar($livroId)
     {

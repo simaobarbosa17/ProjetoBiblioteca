@@ -45,6 +45,9 @@
                              <x-nav-link href="{{ route('verequesicao') }}" :active="request()->routeIs('verequesicao')">
                                 {{ __('Requisitações') }}
                             </x-nav-link>
+                            <x-nav-link href="{{ route('vercarrinho') }}" :active="request()->routeIs('vercarrinho')">
+                                {{ __('Carrinho de Compras') }}
+                            </x-nav-link>
                         @endif
                     @endauth
                 </div>

@@ -2,6 +2,7 @@
 
 
 use App\Http\Controllers\AutorAdminController;
+use App\Http\Controllers\CarrinhoController;
 use App\Http\Controllers\EditoraAdminController;
 use App\Http\Controllers\RequesicoesController;
 use Illuminate\Support\Facades\Route;
@@ -85,6 +86,10 @@ Route::middleware([
     Route::get('/livrodetalhe/{livro}', [DashboardController::class, 'show'])->name('detalhelivro.show');
     Route::post('/reviews', [ReviewsController::class, 'store'])->name('reviews.store');
     Route::post('/livro/{livro}/notificar', [DashboardController::class, 'notificar'])->name('livro.notificar');
+    Route::get('/vercarrinho', [CarrinhoController::class, 'index'])->name('vercarrinho');
+    Route::post('/carrinho', [CarrinhoController::class, 'store'])->name('adicionarcarrinho');
+    Route::delete('/carrinho/remover/{id}', [CarrinhoController::class, 'destroy'])->name('carrinho.remover');
+    Route::post('/carrinho/finalizar', [CarrinhoController::class, 'finalizar'])->name('carrinho.finalizar');
 
 
 
