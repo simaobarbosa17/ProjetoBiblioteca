@@ -4,6 +4,7 @@
 use App\Http\Controllers\AutorAdminController;
 use App\Http\Controllers\CarrinhoController;
 use App\Http\Controllers\EditoraAdminController;
+use App\Http\Controllers\Pagamento;
 use App\Http\Controllers\RequesicoesController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
@@ -59,6 +60,7 @@ Route::middleware(['auth', 'admin'])
         Route::get('/criaradmin', [AdminController::class, 'create'])->name('criaradmin');
         Route::post('/store', [AdminController::class, 'store'])->name('store');
         Route::get('/todasrequesicoes', [ClienteController::class, 'index'])->name('todasrequesicoes');
+        Route::get('/todasencomendas', [CarrinhoController::class, 'adminindex'])->name('todasencomendas');
 
         //GoogleBooksApi
         Route::get('/importar', [LivroController::class, 'formImportarGoogle'])->name('importarlivro.form');
@@ -68,6 +70,8 @@ Route::middleware(['auth', 'admin'])
         Route::get('/reviews', [AdminReviewController::class, 'index'])->name('reviews');
         Route::patch('/reviews/{id}/aprovar', [AdminReviewController::class, 'aprovar'])->name('reviews.aprovar');
         Route::patch('/admin/reviews/{id}/recusar', [AdminReviewController::class, 'recusar'])->name('reviews.recusar');
+
+        
     });
 
 
@@ -89,8 +93,9 @@ Route::middleware([
     Route::get('/vercarrinho', [CarrinhoController::class, 'index'])->name('vercarrinho');
     Route::post('/carrinho', [CarrinhoController::class, 'store'])->name('adicionarcarrinho');
     Route::delete('/carrinho/remover/{id}', [CarrinhoController::class, 'destroy'])->name('carrinho.remover');
-    Route::post('/carrinho/finalizar', [CarrinhoController::class, 'finalizar'])->name('carrinho.finalizar');
-
+    Route::post('/carrinho/finalizar', [CarrinhoController::class, 'mostrarFinalizar'])->name('carrinho.finalizar');
+    Route::post('/carrinho/processar', [CarrinhoController::class, 'processarPagamento'])->name('carrinho.processar');
+   Route::get('/pagamento/sucesso', [Pagamento::class, 'sucesso'])->name('pagamento.sucesso');
 
 
 });

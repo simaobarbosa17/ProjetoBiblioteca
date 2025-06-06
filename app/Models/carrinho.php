@@ -10,6 +10,7 @@ class carrinho extends Model
     protected $table = 'carrinho';
 
     protected $fillable = [
+        'alerta_enviado',
         'livros_id',
         'user_id',
     ];

@@ -47,21 +47,17 @@ class ClienteController extends Controller
      */
     public function show()
     {
-        $requisicoes = auth()->user()->requisicoes()->with('livro', 'review')->latest()->paginate(10);
-        foreach ($requisicoes as $r) {
-            if (Carbon::parse($r->data_entrega)->isTomorrow()) {
+        $requisicoes = auth()->user()->requisicoes()->with('livro', 'review')->latest()->get();
 
-                Mail::to(auth()->user()->email)->send(new LembreteEntrega($r));
-            }
-        }
-        $ativas = $requisicoes->filter(function ($r) {
-            return Carbon::parse($r->data_entrega)->isFuture();
+        $hoje = now()->toDateString();
+
+        $ativas = $requisicoes->filter(function ($r) use ($hoje) {
+            return Carbon::parse($r->data_entrega)->toDateString() > $hoje;
         });
 
-        $naoAtivas = $requisicoes->filter(function ($r) {
-            return Carbon::parse($r->data_entrega)->isToday() || Carbon::parse($r->data_entrega)->isPast();
+        $naoAtivas = $requisicoes->filter(function ($r) use ($hoje) {
+            return Carbon::parse($r->data_entrega)->toDateString() <= $hoje;
         });
-
         return view('verequesicao', compact('ativas', 'naoAtivas'));
     }
 

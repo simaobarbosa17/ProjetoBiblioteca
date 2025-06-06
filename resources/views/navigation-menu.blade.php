@@ -32,6 +32,9 @@
                             <x-nav-link href="{{ route('admin.reviews') }}" :active="request()->routeIs('admin.reviews')">
                                 {{ __('Reviews Livros') }}
                             </x-nav-link>
+                             <x-nav-link href="{{ route('admin.todasencomendas') }}" :active="request()->routeIs('admin.todasencomendas')">
+                                {{ __('Encomendas') }}
+                            </x-nav-link>
                         @else
                             <x-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
                                 {{ __('Livros') }}
@@ -43,7 +46,7 @@
                                 {{ __('Editoras') }}
                             </x-nav-link>
                              <x-nav-link href="{{ route('verequesicao') }}" :active="request()->routeIs('verequesicao')">
-                                {{ __('Requisitações') }}
+                                {{ __('Requisicões') }}
                             </x-nav-link>
                             <x-nav-link href="{{ route('vercarrinho') }}" :active="request()->routeIs('vercarrinho')">
                                 {{ __('Carrinho de Compras') }}

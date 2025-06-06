@@ -8,3 +8,7 @@ Artisan::command('inspire', function () {
 })->purpose('Display an inspiring quote');
 
 Schedule::command('notificar:livros-disponiveis')->daily();
+
+Schedule::command('lembrete:entrega')->daily();
+
+Schedule::command('app:alerta-carrinhos')->everySecond();

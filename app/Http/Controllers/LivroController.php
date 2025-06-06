@@ -220,7 +220,7 @@ class LivroController extends Controller
                 'nome' => $nome,
                 'bibliografia' => $bibliografia,
                 'capa' => $capa,
-                'preco' => 0.00,
+                'preco' => 10.00,
                 'editora_id' => $editora->id,
             ]);
 

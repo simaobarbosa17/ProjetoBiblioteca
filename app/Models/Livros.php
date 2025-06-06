@@ -13,7 +13,15 @@ class Livros extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['isbn', 'nome', 'bibliografia', 'preco', 'capa', 'editora_id'];
+    protected $fillable = [
+        'isbn',
+        'nome',
+        'editora_id',
+        'bibliografia',
+        'capa',
+        'preco',
+        'encomenda_id'
+    ];
 
     public function setNomeAttribute($value)
     {
@@ -115,6 +123,10 @@ class Livros extends Model
     public function carrinho()
     {
         return $this->hasMany(carrinho::class, 'livros_id');
+    }
+    public function encomendas()
+    {
+        return $this->belongsToMany(Encomendas::class, 'encomenda_livro', 'livros_id', 'encomenda_id');
     }
 
 }

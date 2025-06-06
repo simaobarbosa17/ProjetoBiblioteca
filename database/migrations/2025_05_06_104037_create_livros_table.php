@@ -20,7 +20,6 @@ return new class extends Migration {
             $table->string('capa');
             $table->decimal('preco', 8, 2);
             $table->timestamps();
-
             $table->foreign('editora_id')->references('id')->on('editoras')->onDelete('cascade');
         });
     }
