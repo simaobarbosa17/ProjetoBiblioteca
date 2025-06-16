@@ -11,4 +11,4 @@ Schedule::command('notificar:livros-disponiveis')->daily();
 
 Schedule::command('lembrete:entrega')->daily();
 
-Schedule::command('app:alerta-carrinhos')->everySecond();
+Schedule::command('app:alerta-carrinhos')->everyTenMinutes();

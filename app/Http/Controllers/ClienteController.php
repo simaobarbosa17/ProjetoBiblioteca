@@ -8,6 +8,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\LembreteEntrega;
 
+
 class ClienteController extends Controller
 {
     /**
@@ -15,15 +16,33 @@ class ClienteController extends Controller
      */
     public function index()
     {
-        $requisicoes = requesicoes::with(['livro', 'user'])->latest()->paginate(15);
+        $requisicoesAtivas = requesicoes::with(['livro', 'user'])
+            ->where('estado', 'ativa')
+            ->latest()
+            ->paginate(15);
 
-        $totalAtivas = requesicoes::whereDate('data_entrega', '>=', now())->count();
+        $requisicoesDevolvidas = requesicoes::with(['livro', 'user'])
+            ->where('estado', 'devolvida')
+            ->latest()
+            ->paginate(15);
+
+
+        $totalAtivas = requesicoes::where('estado', 'ativa')->count();
+
+        $totalDevolvidas = requesicoes::where('estado', 'devolvida')->count();
 
         $ultimos30dias = requesicoes::whereDate('data_requisicao', '>=', now()->subDays(30))->count();
 
         $entreguesHoje = requesicoes::whereDate('data_entrega', now()->toDateString())->count();
 
-        return view('admin.todasrequesicoes', compact('requisicoes', 'totalAtivas', 'ultimos30dias', 'entreguesHoje'));
+        return view('admin.todasrequesicoes', compact(
+            'requisicoesAtivas',
+            'requisicoesDevolvidas',
+            'totalAtivas',
+            'totalDevolvidas',
+            'ultimos30dias',
+            'entreguesHoje'
+        ));
     }
 
     /**
@@ -47,18 +66,24 @@ class ClienteController extends Controller
      */
     public function show()
     {
-        $requisicoes = auth()->user()->requisicoes()->with('livro', 'review')->latest()->get();
+        $userId = auth()->id();
+        $userId = auth()->id();
 
-        $hoje = now()->toDateString();
+        $requisicoes = requesicoes::with('livro')
+            ->where('user_id', $userId)
+            ->get();
 
-        $ativas = $requisicoes->filter(function ($r) use ($hoje) {
-            return Carbon::parse($r->data_entrega)->toDateString() > $hoje;
-        });
+        $ativas = requesicoes::where('user_id', $userId)
+            ->where('estado', 'ativa')
+            ->with('livro')
+            ->get();
 
-        $naoAtivas = $requisicoes->filter(function ($r) use ($hoje) {
-            return Carbon::parse($r->data_entrega)->toDateString() <= $hoje;
-        });
-        return view('verequesicao', compact('ativas', 'naoAtivas'));
+        $naoAtivas = requesicoes::where('user_id', $userId)
+            ->where('estado', 'devolvida')
+            ->with('livro', 'review')
+            ->get();
+
+        return view('verequesicao', compact('ativas', 'naoAtivas', 'requisicoes'));
     }
 
     /**

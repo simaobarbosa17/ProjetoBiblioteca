@@ -38,6 +38,7 @@ class RequesicoesController extends Controller
 
     public function store(Request $request)
     {
+
         $request->validate([
             'livros_id' => 'required|exists:livros,id',
             'data_requisicao' => 'required|date',
@@ -48,7 +49,11 @@ class RequesicoesController extends Controller
         $livroId = $request->livros_id;
         $dataInicio = Carbon::parse($request->data_requisicao);
         $dataFim = Carbon::parse($request->data_entrega);
+        $livro = Livros::findOrFail($livroId);
 
+        if ($livro->stock <= 0) {
+            return back()->with('error', 'Este livro não tem stock disponível para requisição.');
+        }
 
         $livrosAtivos = requesicoes::where('user_id', $userId)
             ->whereDate('data_entrega', '>=', now())
@@ -80,6 +85,7 @@ class RequesicoesController extends Controller
             'livros_id' => $livroId,
             'data_requisicao' => $dataInicio,
             'data_entrega' => $dataFim,
+            'estado' => 'ativa',
         ]);
 
         Mail::to(auth()->user()->email)->send(new RequisicaoRealizada($requisicao));
@@ -116,5 +122,18 @@ class RequesicoesController extends Controller
     {
         //
     }
+    public function devolver($id)
+    {
 
+        $requisicao = requesicoes::findOrFail($id);
+
+        if ($requisicao->estado !== 'ativa') {
+            return back()->with('error', 'Esta requisição já foi devolvida.');
+        }
+
+        $requisicao->estado = 'devolvida';
+        $requisicao->save();
+
+        return back()->with('success', 'Livro devolvido com sucesso.');
+    }
 }

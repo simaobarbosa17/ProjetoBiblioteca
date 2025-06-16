@@ -11,9 +11,17 @@
         <div>
             <h3 class="text-lg font-bold text-green-600 mb-4">Requisições Ativas</h3>
             @forelse($ativas as $requisicao)
-                <div class="bg-white p-4 rounded shadow mb-2 border-l-4 border-green-500">
+                <div class="bg-white p-4 rounded shadow mb-4 border-l-4 border-green-500">
                     <p><strong>Livro:</strong> {{ $requisicao->livro->nome }}</p>
                     <p><strong>Entrega até:</strong> {{ \Carbon\Carbon::parse($requisicao->data_entrega)->format('d/m/Y') }}</p>
+
+                   <form action="{{ route('requisicoes.devolver', $requisicao->id) }}" method="POST" class="mt-3">
+                        @csrf
+                        @method('PATCH')
+                        <button type="submit" class="bg-red-500 hover:bg-red-600 text-black font-bold py-1 px-3 rounded">
+                             Devolver
+                        </button>
+                    </form>
                 </div>
             @empty
                 <p class="text-gray-600">Nenhuma requisição ativa.</p>
@@ -22,7 +30,7 @@
 
 
             <div>
-    <h3 class="text-lg font-bold text-red-600 mb-4">Requisições Finalizadas</h3>
+    <h3 class="text-lg font-bold text-red-600 mb-4">Requisições Devolvidas</h3>
 
    @forelse($naoAtivas as $requisicao)
     <div class="bg-white p-4 rounded shadow mb-4 border-l-4 border-red-500">

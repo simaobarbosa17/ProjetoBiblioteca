@@ -71,7 +71,7 @@ Route::middleware(['auth', 'admin'])
         Route::patch('/reviews/{id}/aprovar', [AdminReviewController::class, 'aprovar'])->name('reviews.aprovar');
         Route::patch('/admin/reviews/{id}/recusar', [AdminReviewController::class, 'recusar'])->name('reviews.recusar');
 
-        
+
     });
 
 
@@ -95,7 +95,7 @@ Route::middleware([
     Route::delete('/carrinho/remover/{id}', [CarrinhoController::class, 'destroy'])->name('carrinho.remover');
     Route::post('/carrinho/finalizar', [CarrinhoController::class, 'mostrarFinalizar'])->name('carrinho.finalizar');
     Route::post('/carrinho/processar', [CarrinhoController::class, 'processarPagamento'])->name('carrinho.processar');
-   Route::get('/pagamento/sucesso', [Pagamento::class, 'sucesso'])->name('pagamento.sucesso');
-
+    Route::get('/pagamento/sucesso', [Pagamento::class, 'sucesso'])->name('pagamento.sucesso');
+    Route::patch('/requisicoes/{id}/devolver', [RequesicoesController::class, 'devolver'])->name('requisicoes.devolver');
 
 });

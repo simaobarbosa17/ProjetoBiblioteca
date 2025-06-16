@@ -20,7 +20,8 @@ class Livros extends Model
         'bibliografia',
         'capa',
         'preco',
-        'encomenda_id'
+        'encomenda_id',
+        'stock'
     ];
 
     public function setNomeAttribute($value)

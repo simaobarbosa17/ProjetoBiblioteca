@@ -17,6 +17,7 @@ class requesicoes extends Model
         'user_id',
         'data_requisicao',
         'data_entrega',
+        'estado',
     ];
 
     public function livro()
