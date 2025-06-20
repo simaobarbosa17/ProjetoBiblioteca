@@ -4,6 +4,7 @@
 use App\Http\Controllers\AutorAdminController;
 use App\Http\Controllers\CarrinhoController;
 use App\Http\Controllers\EditoraAdminController;
+use App\Http\Controllers\LogController;
 use App\Http\Controllers\Pagamento;
 use App\Http\Controllers\RequesicoesController;
 use Illuminate\Support\Facades\Route;
@@ -71,6 +72,7 @@ Route::middleware(['auth', 'admin'])
         Route::patch('/reviews/{id}/aprovar', [AdminReviewController::class, 'aprovar'])->name('reviews.aprovar');
         Route::patch('/admin/reviews/{id}/recusar', [AdminReviewController::class, 'recusar'])->name('reviews.recusar');
 
+        Route::get('/logs', [LogController::class, 'index'])->name('log');
 
     });
 
@@ -97,5 +99,6 @@ Route::middleware([
     Route::post('/carrinho/processar', [CarrinhoController::class, 'processarPagamento'])->name('carrinho.processar');
     Route::get('/pagamento/sucesso', [Pagamento::class, 'sucesso'])->name('pagamento.sucesso');
     Route::patch('/requisicoes/{id}/devolver', [RequesicoesController::class, 'devolver'])->name('requisicoes.devolver');
+  
 
 });

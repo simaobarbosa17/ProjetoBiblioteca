@@ -35,6 +35,9 @@
                              <x-nav-link href="{{ route('admin.todasencomendas') }}" :active="request()->routeIs('admin.todasencomendas')">
                                 {{ __('Encomendas') }}
                             </x-nav-link>
+                            <x-nav-link href="{{ route('admin.log') }}" :active="request()->routeIs('admin.log')">
+                                {{ __('Log') }}
+                            </x-nav-link>
                         @else
                             <x-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
                                 {{ __('Livros') }}
