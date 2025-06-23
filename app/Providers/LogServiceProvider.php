@@ -18,7 +18,7 @@ class LogServiceProvider extends ServiceProvider
                 Log::create([
                     'date' => now()->toDateString(),
                     'time' => now()->toTimeString(),
-                    'user_id' => Auth::id(),
+                    'user_id' => Auth::check() ? Auth::id() : null,
                     'module' => $module,
                     'object_id' => $objectId,
                     'change' => $message,

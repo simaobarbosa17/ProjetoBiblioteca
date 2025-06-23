@@ -22,17 +22,15 @@
                         </div>
                         <div>
                             <div class="text-2xl font-bold text-green-600">
-                                €{{ number_format($carrinho->sum(fn($item) => $item->livro->preco), 2, ',', '.') }}
+                                €{{ number_format($carrinho->sum(fn($item) => $item->livro->preco * $item->quantidade), 2, ',', '.') }}
                             </div>
                             <div class="text-sm text-gray-500">Total</div>
                         </div>
                         <div>
-                            <form action="{{ route('carrinho.finalizar') }}" method="POST">
-                                @csrf
-                                <button class="bg-blue-600 hover:bg-blue-700 text-black font-medium py-2 px-6 rounded-lg transition-colors">
-                                    Finalizar Compra
-                                </button>
-                            </form>
+                            <a href="{{ route('carrinho.finalizar') }}" 
+                            class="bg-blue-600 hover:bg-blue-700 text-black font-medium py-2 px-6 rounded-lg transition-colors inline-block">
+                                Finalizar Compra
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -44,6 +42,7 @@
                                 <tr>
                                     <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Livro</th>
                                     <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Detalhes</th>
+                                    <th class="py-3 px-4 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Quantidade</th>
                                     <th class="py-3 px-4 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Preço</th>
                                       <th class="py-3 px-4 text-center text-xs font-medium text-gray-500 uppercase tracking-wider"></th>
                                 </tr>
@@ -71,7 +70,14 @@
                                                 </div>
                                             </div>
                                         </td>
-
+                                        <td class="py-4 px-4 text-center">
+                                            <form method="POST" action="{{ route('carrinho.atualizar', $item->id) }}">
+                                                @csrf
+                                                @method('PUT')
+                                                <input type="number" name="quantidade" value="{{ $item->quantidade }}" min="1" class="w-16 text-center border rounded">
+                                                <button type="submit" class="ml-2 text-blue-600 hover:underline text-sm">Atualizar</button>
+                                            </form>
+                                        </td>
                                         <td class="py-4 px-4 text-center">
                                             <div class="text-lg font-semibold text-gray-900">
                                                 €{{ number_format($item->livro->preco, 2, ',', '.') }}

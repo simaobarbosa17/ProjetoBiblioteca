@@ -53,6 +53,7 @@ class EditoraAdminController extends Controller
             ]);
 
         }
+        app('SiteLogger')('Editora', $editora->id, 'Editora Criada ');
         return redirect()->route('admin.editoras')->with('success', 'Editora criado com sucesso!');
     }
 
@@ -106,7 +107,7 @@ class EditoraAdminController extends Controller
         }
 
         $editora->save();
-
+        app('SiteLogger')('Editora', $editora->id, 'Editora Alterada ');
         return redirect()->route('admin.editoras')->with('success', 'Editora atualizado com sucesso.');
     }
 
@@ -117,6 +118,7 @@ class EditoraAdminController extends Controller
     {
         $editora = Editoras::findOrFail($id);
         $editora->delete();
+        app('SiteLogger')('Editora', $editora->id, 'Editora Apagada ');
         return redirect()->route('admin.editoras')->with('success', 'Editora removido com sucesso.');
     }
 }

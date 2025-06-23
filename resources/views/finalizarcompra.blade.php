@@ -12,8 +12,12 @@
             <ul class="divide-y divide-gray-200 mb-6">
                 @foreach($carrinho as $item)
                     <li class="py-3 flex justify-between items-center">
-                        <span>{{ $item->livro->nome }}</span>
-                        <span>€{{ number_format($item->livro->preco, 2, ',', '.') }}</span>
+                          <span>{{ $item->livro->nome }} (x{{ $item->quantidade }})</span>
+                         <span>
+                            €{{ number_format($item->livro->preco, 2, ',', '.') }} 
+                            &times; {{ $item->quantidade }} = 
+                            <strong>€{{ number_format($item->livro->preco * $item->quantidade, 2, ',', '.') }}</strong>
+                        </span>
                     </li>
                 @endforeach
             </ul>
@@ -29,7 +33,11 @@
                     <textarea id="morada" name="morada" rows="3" required
                         class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">{{ old('morada') }}</textarea>
                 </div>
-
+                @if(session('erro'))
+                    <div class="mb-4 p-4 bg-red-100 text-red-700 rounded">
+                        {{ session('erro') }}
+                    </div>
+                @endif
                 <button type="submit"
                         class="bg-blue-600 hover:bg-blue-700 text-black px-6 py-2 rounded shadow font-medium">
                     Pagar com Stripe

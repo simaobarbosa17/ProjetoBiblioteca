@@ -29,6 +29,7 @@ class ReviewsController extends Controller
         foreach ($adminEmails as $email) {
             Mail::to($email)->send(new \App\Mail\ReviewAdmin($review));
         }
+         app('SiteLogger')('Review', $review->id, 'Review Criada ');
         return redirect()->back()->with('success', 'Review enviada com sucesso!');
     }
 }

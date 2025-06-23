@@ -60,6 +60,19 @@
                                 @enderror
                             </div>
 
+                             <div class="form-control w-full">
+                                <label class="label">
+                                    <span class="label-text font-medium">Quantidade em Stock</span>
+                                </label>
+                                <input type="number" name="stock" min="0" class="input input-bordered w-full"
+                                   value="{{ $livro->stock }}" required />
+                                @error('stock')
+                                    <label class="label">
+                                        <span class="label-text-alt text-error">{{ $message }}</span>
+                                    </label>
+                                @enderror
+                            </div>
+
 
                             <div class="form-control w-full">
                                 <label class="label">

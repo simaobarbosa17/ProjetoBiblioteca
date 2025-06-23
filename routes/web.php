@@ -95,10 +95,10 @@ Route::middleware([
     Route::get('/vercarrinho', [CarrinhoController::class, 'index'])->name('vercarrinho');
     Route::post('/carrinho', [CarrinhoController::class, 'store'])->name('adicionarcarrinho');
     Route::delete('/carrinho/remover/{id}', [CarrinhoController::class, 'destroy'])->name('carrinho.remover');
-    Route::post('/carrinho/finalizar', [CarrinhoController::class, 'mostrarFinalizar'])->name('carrinho.finalizar');
+    Route::get('/carrinho/finalizar', [CarrinhoController::class, 'mostrarFinalizar'])->name('carrinho.finalizar');
     Route::post('/carrinho/processar', [CarrinhoController::class, 'processarPagamento'])->name('carrinho.processar');
     Route::get('/pagamento/sucesso', [Pagamento::class, 'sucesso'])->name('pagamento.sucesso');
     Route::patch('/requisicoes/{id}/devolver', [RequesicoesController::class, 'devolver'])->name('requisicoes.devolver');
-  
+    Route::put('/carrinho/{id}/atualizar', [CarrinhoController::class, 'atualizar'])->name('carrinho.atualizar');
 
 });

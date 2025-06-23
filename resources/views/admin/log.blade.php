@@ -10,7 +10,7 @@
          
             <div class="mb-6 bg-white p-4 rounded shadow">
                 <form method="GET" class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                    <input type="text" name="user" placeholder="Usuário" value="{{ request('user') }}"
+                    <input type="text" name="user" placeholder="Utilizador" value="{{ request('user') }}"
                            class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
                     <input type="text" name="module" placeholder="Módulo" value="{{ request('module') }}"
                            class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
@@ -30,7 +30,7 @@
                         <tr>
                             <th class="px-4 py-2 text-left">Data</th>
                             <th class="px-4 py-2 text-left">Hora</th>
-                            <th class="px-4 py-2 text-left">Usuário</th>
+                            <th class="px-4 py-2 text-left">Utilizador</th>
                             <th class="px-4 py-2 text-left">Módulo</th>
                             <th class="px-4 py-2 text-left">ID Objeto</th>
                             <th class="px-4 py-2 text-left">Alteração</th>

@@ -50,7 +50,27 @@ class CarrinhoController extends Controller
 
         return redirect()->route('dashboard')->with('success', 'Livro adicionado ao carrinho!');
     }
+    public function atualizar(Request $request, $id)
+    {
+        $request->validate([
+            'quantidade' => 'required|integer|min:1',
+        ]);
 
+        $carrinho = Carrinho::findOrFail($id);
+
+        if ($carrinho->user_id !== auth()->id()) {
+            abort(403);
+        }
+        $livro = $carrinho->livro;
+
+        if ($request->quantidade > $livro->stock) {
+            return redirect()->back()->with('error', 'Quantidade solicitada excede o estoque disponível.');
+        }
+        $carrinho->quantidade = $request->quantidade;
+        $carrinho->save();
+
+        return redirect()->back()->with('success', 'Quantidade atualizada com sucesso!');
+    }
     /**
      * Display the specified resource.
      */
@@ -88,7 +108,7 @@ class CarrinhoController extends Controller
     {
         $user = auth()->user();
         $carrinho = Carrinho::with('livro')->where('user_id', $user->id)->get();
-        $total = $carrinho->sum(fn($item) => $item->livro->preco);
+        $total = $carrinho->sum(fn($item) => $item->livro->preco * $item->quantidade);
 
         return view('finalizarcompra', compact('carrinho', 'total'));
     }
@@ -100,6 +120,17 @@ class CarrinhoController extends Controller
         ]);
 
         $user = auth()->user();
+
+
+        $carrinho = Carrinho::with('livro')->where('user_id', $user->id)->get();
+
+        foreach ($carrinho as $item) {
+            if ($item->quantidade > $item->livro->stock) {
+                return redirect()->back()
+                    ->withInput()
+                    ->with('erro', "Não há stock suficiente para o livro '{$item->livro->nome}'. Stock disponível: {$item->livro->stock}, quantidade no carrinho: {$item->quantidade}.");
+            }
+        }
 
 
         $encomenda = Encomendas::where('user_id', $user->id)
@@ -117,16 +148,10 @@ class CarrinhoController extends Controller
             $encomenda->save();
         }
 
-
-        $carrinho = Carrinho::with('livro')->where('user_id', $user->id)->get();
-
-
         $livrosIds = $carrinho->pluck('livro.id')->toArray();
         $encomenda->livros()->syncWithoutDetaching($livrosIds);
 
-
-        $total = $carrinho->sum(fn($item) => $item->livro->preco);
-
+        $total = $carrinho->sum(fn($item) => $item->livro->preco * $item->quantidade);
 
         Stripe::setApiKey(config('services.stripe.secret'));
 
@@ -153,7 +178,6 @@ class CarrinhoController extends Controller
         ]);
 
         return redirect($session->url);
-
     }
 
     public function adminindex()

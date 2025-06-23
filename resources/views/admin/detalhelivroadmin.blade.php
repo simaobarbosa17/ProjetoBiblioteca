@@ -36,6 +36,7 @@
                             <th class="text-left p-2">Usuário</th>
                             <th class="text-left p-2">Data de Requisição</th>
                             <th class="text-left p-2">Data de Entrega</th>
+                            <th class="text-left p-2">Data Devolvida</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -44,6 +45,9 @@
                                 <td class="p-2">{{ $requisicao->user->name }}</td>
                                 <td class="p-2">{{ \Carbon\Carbon::parse($requisicao->data_requisicao)->format('d/m/Y') }}</td>
                                 <td class="p-2">{{ \Carbon\Carbon::parse($requisicao->data_entrega)->format('d/m/Y') }}</td>
+                                <td class="p-2">
+                                    {{ $requisicao->data_devolvida ? \Carbon\Carbon::parse($requisicao->data_devolvida)->format('d/m/Y') : '—' }}
+                                </td>
                             </tr>
                         @endforeach
                     </tbody>

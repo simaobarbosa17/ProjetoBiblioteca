@@ -35,7 +35,9 @@
    @forelse($naoAtivas as $requisicao)
     <div class="bg-white p-4 rounded shadow mb-4 border-l-4 border-red-500">
         <p><strong>Livro:</strong> {{ $requisicao->livro->nome }}</p>
-        <p><strong>Entregue em:</strong> {{ \Carbon\Carbon::parse($requisicao->data_entrega)->format('d/m/Y') }}</p>
+        <p><strong>Entregue em:</strong> 
+            {{ $requisicao->data_devolvida ? \Carbon\Carbon::parse($requisicao->data_devolvida)->format('d/m/Y') : 'Data não disponível' }}
+        </p>
 
     @if ($requisicao->review === null)
             <form action="{{ route('reviews.store') }}" method="POST" class="mt-4 space-y-2">

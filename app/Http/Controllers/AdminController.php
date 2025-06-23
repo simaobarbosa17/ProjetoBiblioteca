@@ -35,13 +35,13 @@ class AdminController extends Controller
             'password' => 'required|string|min:8|confirmed',
         ]);
 
-        User::create([
+        $user = User::create([
             'name' => 'admin',
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
             'role' => 'admin'
         ]);
-
+        app('SiteLogger')('Admin', $user->id, 'Admin Criado ');
         return redirect()->route('admin.dashboard')->with('success', 'Administrador criado com sucesso.');
     }
 

@@ -46,6 +46,7 @@
                                 <th class="py-2 px-3 text-center">Bibliografia</th>
                                 <th class="py-2 px-3 text-center">Capa</th>
                                 <th class="py-2 px-3 text-center">{!! sortLink('Preço(€)', 'preco') !!}</th>
+                                 <th class="py-2 px-3 text-center">Stock</th>
                                 <th class="py-2 px-3 text-center"></th>
                             </tr>
                         </thead>
@@ -74,6 +75,9 @@
                                     </td>
                                     <td class="py-3 px-3 text-center font-medium">
                                         {{$livros->preco}}
+                                    </td>
+                                     <td class="py-3 px-3 text-center font-medium">
+                                        {{$livros->stock}}
                                     </td>
                                     <td class="py-3 px-3 text-center">
                                         <div class="flex justify-center gap-2">

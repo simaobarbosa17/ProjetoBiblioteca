@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Stripe\Stripe;
-use Stripe\Checkout\Session as StripeSession;
+use Stripe\Checkout\Session;
 
 class Pagamento extends Controller
 {
@@ -17,7 +17,7 @@ class Pagamento extends Controller
         }
 
         Stripe::setApiKey(config('services.stripe.secret'));
-        $session = StripeSession::retrieve($sessionId);
+        $session = Session::retrieve($sessionId);
 
         $encomendaId = $session->metadata->encomenda_id ?? null;
 
@@ -30,16 +30,25 @@ class Pagamento extends Controller
 
                 $carrinho = \App\Models\Carrinho::with('livro')->where('user_id', $encomenda->user_id)->get();
 
-              
                 $livrosIds = $carrinho->pluck('livro.id')->toArray();
                 $encomenda->livros()->syncWithoutDetaching($livrosIds);
 
-               
+
                 foreach ($carrinho as $item) {
+                    $livro = $item->livro;
+                    if ($livro->stock >= $item->quantidade) {
+                        $livro->stock -= $item->quantidade;
+                        $livro->save();
+                    } else {
+
+                        return redirect()->route('dashboard')->with('erro', "Estoque insuficiente para o livro {$livro->nome}.");
+                    }
+
+
                     $item->delete();
                 }
             }
-
+            app('SiteLogger')('Livro', $livro->id, 'Livro Comprado ');
             return view('pagamento-sucesso');
         }
 

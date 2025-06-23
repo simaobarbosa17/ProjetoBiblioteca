@@ -3,11 +3,12 @@
 namespace App\Console\Commands;
 
 use App\Models\livro_notificacoes;
+use App\Models\Livros;
 use App\Models\requesicoes;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\LivroDisponivel;
-use Carbon\Carbon;
+
 
 class NotificarLivrosDisponiveis extends Command
 {
@@ -16,26 +17,20 @@ class NotificarLivrosDisponiveis extends Command
 
     public function handle()
     {
-        $hoje = Carbon::today()->toDateString();
+        $livrosDisponiveis = Livros::where('stock', '>=', 1)->get();
 
-
-        $requisicoes = requesicoes::whereDate('data_entrega', $hoje)
-            ->with('livro')
-            ->get();
-
-        foreach ($requisicoes as $requisicao) {
-            $livro = $requisicao->livro;
-
-            $notificacoes = livro_notificacoes::where('livros_id', $livro->id)
+        foreach ($livrosDisponiveis as $livro) {
+            $notificacoesPendentes = livro_notificacoes::where('livros_id', $livro->id)
                 ->where('notificado', false)
                 ->with('user')
                 ->get();
 
-            foreach ($notificacoes as $notificar) {
-                Mail::to($notificar->user->email)->send(new LivroDisponivel($livro));
-                $notificar->update(['notificado' => true]);
+            foreach ($notificacoesPendentes as $notificacao) {
+                Mail::to($notificacao->user->email)->send(new LivroDisponivel($livro));
 
-                $this->info("Notificação enviada para {$notificar->user->email} sobre o livro '{$livro->nome}'");
+                $notificacao->update(['notificado' => true]);
+
+                $this->info("Notificação enviada para {$notificacao->user->email} sobre o livro '{$livro->nome}'");
             }
         }
 

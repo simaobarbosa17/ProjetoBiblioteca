@@ -55,8 +55,11 @@ class RequesicoesController extends Controller
             return back()->with('error', 'Este livro não tem stock disponível para requisição.');
         }
 
+        $livro->stock -= 1;
+        $livro->save();
+
         $livrosAtivos = requesicoes::where('user_id', $userId)
-            ->whereDate('data_entrega', '>=', now())
+            ->where('estado', 'ativa')
             ->count();
 
         if ($livrosAtivos >= 3) {
@@ -65,6 +68,7 @@ class RequesicoesController extends Controller
 
 
         $conflito = requesicoes::where('livros_id', $livroId)
+            ->where('estado', 'ativa')
             ->where(function ($query) use ($dataInicio, $dataFim) {
                 $query->whereBetween('data_requisicao', [$dataInicio, $dataFim])
                     ->orWhereBetween('data_entrega', [$dataInicio, $dataFim])
@@ -94,7 +98,7 @@ class RequesicoesController extends Controller
         foreach ($adminEmails as $email) {
             Mail::to($email)->send(new \App\Mail\RequisicaoAdmin($requisicao));
         }
-
+        app('SiteLogger')('Livro', $livroId, 'Livro requisitado ');
         return redirect()->route('dashboard')->with('success', 'Livro requisitado com sucesso.');
     }
 
@@ -132,8 +136,13 @@ class RequesicoesController extends Controller
         }
 
         $requisicao->estado = 'devolvida';
+        $requisicao->data_devolvida = now();
         $requisicao->save();
 
+        $livro = Livros::findOrFail($requisicao->livros_id);
+        $livro->stock += 1;
+        $livro->save();
+        app('SiteLogger')('Livro', $livro->id, 'Livro Devolvido ');
         return back()->with('success', 'Livro devolvido com sucesso.');
     }
 }

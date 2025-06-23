@@ -48,6 +48,7 @@ class LivroController extends Controller
             'bibliografia' => 'nullable|string',
             'capa' => 'nullable|image|max:2048',
             'preco' => 'required|numeric|min:0',
+            'stock' => 'required|numeric|min:0',
         ]);
 
 
@@ -70,11 +71,12 @@ class LivroController extends Controller
             'bibliografia' => $validated['bibliografia'] ?? '',
             'capa' => $capaPath,
             'preco' => $validated['preco'],
+            'stock' => $validated['stock'],
         ]);
 
 
         $livro->autores()->sync($validated['autor_ids']);
-
+        app('SiteLogger')('Livro', $livro->id, 'Livro Criado ');
         return redirect()->route('admin.dashboard')->with('success', 'Livro criado com sucesso!');
     }
 
@@ -111,6 +113,7 @@ class LivroController extends Controller
             'autores' => 'required|array',
             'autores.*' => 'exists:autores,id',
             'capa' => 'nullable|image|max:2048',
+            'stock' => 'required|numeric',
         ]);
 
         $livro = Livros::findOrFail($id);
@@ -120,6 +123,7 @@ class LivroController extends Controller
         $livro->bibliografia = $request->bibliografia;
         $livro->preco = $request->preco;
         $livro->editora_id = $request->editora_id;
+        $livro->stock = $request->stock;
 
 
         if ($request->hasFile('capa')) {
@@ -142,7 +146,7 @@ class LivroController extends Controller
 
 
         $livro->autores()->sync($request->autores);
-
+        app('SiteLogger')('Livro', $livro->id, 'Livro Alterado ');
         return redirect()->route('admin.dashboard')->with('success', 'Livro atualizado com sucesso.');
     }
 
@@ -153,6 +157,7 @@ class LivroController extends Controller
     {
         $livro = Livros::findOrFail($id);
         $livro->delete();
+        app('SiteLogger')('Livro', $livro->id, 'Livro Apagado ');
         return redirect()->route('admin.dashboard')->with('success', 'Livro removido com sucesso.');
     }
 
@@ -179,7 +184,6 @@ class LivroController extends Controller
         }
 
         $totalPages = min(5, ceil($totalItems / $maxResults));
-
         return view('admin.importarlivro', compact('livros', 'query', 'page', 'totalPages'));
     }
 
@@ -221,6 +225,7 @@ class LivroController extends Controller
                 'bibliografia' => $bibliografia,
                 'capa' => $capa,
                 'preco' => 10.00,
+                'stock' => 3,
                 'editora_id' => $editora->id,
             ]);
 
@@ -243,7 +248,7 @@ class LivroController extends Controller
             }
 
             DB::commit();
-
+            app('SiteLogger')('Livro', $livro->id, 'Livro Importado ');
             return redirect()->route('admin.dashboard')->with('success', 'Livro importado com sucesso!');
         } catch (\Exception $e) {
             DB::rollback();

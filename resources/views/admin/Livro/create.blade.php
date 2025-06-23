@@ -58,6 +58,19 @@
 
                             <div class="form-control w-full">
                                 <label class="label">
+                                    <span class="label-text font-medium">Quantidade em Stock</span>
+                                </label>
+                                <input type="number" name="stock" min="0" class="input input-bordered w-full"
+                                    value="{{ old('stock', 1) }}" required />
+                                @error('stock')
+                                    <label class="label">
+                                        <span class="label-text-alt text-error">{{ $message }}</span>
+                                    </label>
+                                @enderror
+                            </div>
+
+                            <div class="form-control w-full">
+                                <label class="label">
                                     <span class="label-text font-medium">Editora</span>
                                 </label>
                                 <select name="editora_id" class="select select-bordered w-full" required>

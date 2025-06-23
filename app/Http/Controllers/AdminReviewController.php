@@ -30,6 +30,7 @@ class AdminReviewController extends Controller
         // Envia email para o usuário
         Mail::to($review->user->email)->send(new ReviewEstado($review, true));
 
+        app('SiteLogger')('Review', $review->id, 'Review Aprovada ');
         return back()->with('success', 'Review aprovada com sucesso!');
     }
 
@@ -47,7 +48,7 @@ class AdminReviewController extends Controller
 
         // Envia email para o usuário
         Mail::to($review->user->email)->send(new ReviewEstado($review, false));
-
+        app('SiteLogger')('Review', $review->id, 'Review Recusada ');
         return back()->with('success', 'Review recusada com sucesso!');
     }
 }

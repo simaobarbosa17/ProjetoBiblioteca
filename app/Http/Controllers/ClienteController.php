@@ -33,8 +33,8 @@ class ClienteController extends Controller
 
         $ultimos30dias = requesicoes::whereDate('data_requisicao', '>=', now()->subDays(30))->count();
 
-        $entreguesHoje = requesicoes::whereDate('data_entrega', now()->toDateString())->count();
-
+        $entreguesHoje = requesicoes::whereDate('data_devolvida', now()->toDateString())->count();
+        
         return view('admin.todasrequesicoes', compact(
             'requisicoesAtivas',
             'requisicoesDevolvidas',

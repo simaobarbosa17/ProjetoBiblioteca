@@ -35,8 +35,11 @@
                     <p><strong>Livro:</strong> {{ $requisicao->livro->nome }}</p>
                     <p><strong>Requisitado em:</strong> {{ \Carbon\Carbon::parse($requisicao->data_requisicao)->format('d/m/Y') }}</p>
                     <p><strong>Entrega prevista:</strong> {{ \Carbon\Carbon::parse($requisicao->data_entrega)->format('d/m/Y') }}</p>
+                    <p><strong>Entregue em:</strong> 
+                        {{ $requisicao->data_devolvida ? \Carbon\Carbon::parse($requisicao->data_devolvida)->format('d/m/Y') : 'Data não registrada' }}
+                    </p>
                     <p><strong>Estado:</strong> {{ ucfirst($requisicao->estado) }}</p>
-                </div>
+                    </div>
             @empty
                 <p class="text-gray-600">Nenhuma requisição ativa encontrada.</p>
             @endforelse

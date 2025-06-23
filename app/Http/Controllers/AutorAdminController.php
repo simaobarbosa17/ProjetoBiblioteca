@@ -51,6 +51,8 @@ class AutorAdminController extends Controller
 
             ]);
         }
+        app('SiteLogger')('Autor', $autor->id, 'Autor Criado ');
+
         return redirect()->route('admin.autores')->with('success', 'Autor criado com sucesso!');
     }
 
@@ -104,7 +106,7 @@ class AutorAdminController extends Controller
         }
         $autor->save();
 
-
+        app('SiteLogger')('Autor', $autor->id, 'Autor Alterado ');
         return redirect()->route('admin.autores')->with('success', 'Autor atualizado com sucesso.');
     }
 
@@ -115,6 +117,7 @@ class AutorAdminController extends Controller
     {
         $autor = Autores::findOrFail($id);
         $autor->delete();
+        app('SiteLogger')('Autor', $autor->id, 'Autor Apagado ');
         return redirect()->route('admin.autores')->with('success', 'Autor removido com sucesso.');
     }
 }

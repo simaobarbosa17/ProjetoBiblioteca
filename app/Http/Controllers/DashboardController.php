@@ -65,9 +65,8 @@ class DashboardController extends Controller
         ])->findOrFail($livro);
 
 
-        $livro->disponivel = !requesicoes::where('livros_id', $livro->id)
-            ->whereDate('data_entrega', '>=', now())
-            ->exists();
+        $livro->disponivel = $livro->stock >= 1;
+
 
         $user = Auth::user();
 
@@ -80,7 +79,7 @@ class DashboardController extends Controller
                 ->where('livros_id', $livro->id)
                 ->where('notificado', false)
                 ->exists();
-             $jaSolicitado = requesicoes::where('user_id', $user->id)
+            $jaSolicitado = requesicoes::where('user_id', $user->id)
                 ->where('livros_id', $livro->id)
                 ->whereDate('data_entrega', '>=', now())
                 ->exists();
@@ -89,7 +88,7 @@ class DashboardController extends Controller
                 ->exists();
         }
 
-        
+
 
         $todosLivros = Livros::all()->except($livro->id);
         $descrBase = $this->limparTexto($livro->bibliografia);
@@ -101,7 +100,7 @@ class DashboardController extends Controller
             return $outro;
         })->sortByDesc('similaridade')->take(3);
 
-        
+
 
         return view('detalhelivro', compact('livro', 'notificado', 'relacionados', 'nocarrinho', 'jaSolicitado'));
     }
