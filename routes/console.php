@@ -7,10 +7,10 @@ Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote');
 
-Schedule::command('notificar:livros-disponiveis')->everyTenMinutes();
+Schedule::command('notificar:livros-disponiveis')->everySecond();
 
-Schedule::command('lembrete:entrega')->daily();
+Schedule::command('lembrete:entrega')->everySecond();
 
-Schedule::command('app:alerta-carrinhos')->everyTenMinutes();
+Schedule::command('app:alerta-carrinhos')->everySecond();
 
 //php artisan schedule:work ou php artisan:nome do command

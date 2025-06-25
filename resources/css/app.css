@@ -1,11 +1,6 @@
-@import "tailwindcss";
-
-@source "../**/*.blade.php";
-@source "../**/*.js";
-@source "../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php";
-@source "../../storage/framework/views/*.php";
-
-@plugin "daisyui";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 [x-cloak] {
     display: none;

@@ -149,7 +149,7 @@ class CarrinhoController extends Controller
         }
 
         $livrosIds = $carrinho->pluck('livro.id')->toArray();
-        $encomenda->livros()->syncWithoutDetaching($livrosIds);
+        $encomenda->livros()->sync($livrosIds);
 
         $total = $carrinho->sum(fn($item) => $item->livro->preco * $item->quantidade);
 
