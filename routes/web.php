@@ -84,8 +84,8 @@ Route::middleware([
     'verified',
 ])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    Route::get('/autores', [AutoresController::class, 'index'])->name('autores');
-    Route::get('/editoras', [EditorasController::class, 'index'])->name('editoras');
+    //Route::get('/autores', [AutoresController::class, 'index'])->name('autores');
+    //Route::get('/editoras', [EditorasController::class, 'index'])->name('editoras');
     Route::get('/requisicoes/{livro}', [RequesicoesController::class, 'show'])->name('requisicoes.show');
     Route::post('/requisicoes', [RequesicoesController::class, 'store'])->name('requisicoes.store');
     Route::get('/verequesicao', [ClienteController::class, 'show'])->name('verequesicao');

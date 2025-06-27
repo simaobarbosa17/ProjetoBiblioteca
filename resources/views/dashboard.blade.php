@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="text-2xl font-bold text-base-content flex items-center gap-2">
-            📚 <span>Lista de Livros</span>
+             <span>Lista de Livros</span>
             <div class="badge badge-primary badge-sm">Biblioteca Digital</div>
         </h2>
     </x-slot>
@@ -28,8 +28,8 @@
             </div>
 
             <!-- Estatísticas -->
-            <div class="stats shadow mb-8 w-full">
-                <div class="stat">
+            <div class="stats shadow mb-8 w-full flex flex-col sm:flex-row sm:space-x-6">
+                <div class="stat w-full sm:w-1/3 mb-4 sm:mb-0">
                     <div class="stat-figure text-primary">
                         <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
                             <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
@@ -40,7 +40,7 @@
                     <div class="stat-desc">Na biblioteca digital</div>
                 </div>
                 
-                <div class="stat">
+                <div class="stat w-full sm:w-1/3 mb-4 sm:mb-0">
                     <div class="stat-figure text-secondary">
                         <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
                             <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"/>
@@ -51,7 +51,7 @@
                     <div class="stat-desc">de {{ $livro->lastPage() }} páginas</div>
                 </div>
                 
-                <div class="stat">
+                <div class="stat w-full sm:w-1/3">
                     <div class="stat-figure text-accent">
                         <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
                             <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"/>
@@ -120,7 +120,7 @@
                     </div>
                 @endforeach
             </div>
-                <button class="btn btn-primary">Botão Aqua</button>
+
             <!-- Paginação -->
             <div class="mt-12 flex justify-center">
                 <div class="join">
@@ -130,4 +130,3 @@
         </div>
     </div>
 </x-app-layout>
-

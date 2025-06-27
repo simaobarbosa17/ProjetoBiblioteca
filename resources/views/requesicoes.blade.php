@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <h2 class="font-semibold text-xl leading-tight">
             Requisitar Livro: {{ $livro->nome }}
         </h2>
     </x-slot>
@@ -12,12 +12,12 @@
             </div>
         @endif
 
-        <form action="{{ route('requisicoes.store') }}" method="POST" class="space-y-6 bg-white p-6 rounded shadow">
+        <form action="{{ route('requisicoes.store') }}" method="POST" class="space-y-6p-6 rounded shadow">
             @csrf
             <input type="hidden" name="livros_id" value="{{ $livro->id }}">
 
             <div>
-                <label for="data_requisicao" class="block font-medium text-gray-700">Data da Requisição</label>
+                <label for="data_requisicao" class="block font-medium">Data da Requisição</label>
                 <input type="date" name="data_requisicao" id="data_requisicao"
                     value="{{ old('data_requisicao', now()->format('Y-m-d')) }}" class="input input-bordered w-full" readonly
                     required>
@@ -27,7 +27,7 @@
             </div>
 
             <div>
-                <label for="data_entrega" class="block font-medium text-gray-700">Data da Entrega</label>
+                <label for="data_entrega" class="block font-medium">Data da Entrega</label>
                 <input type="date" name="data_entrega" id="data_entrega"
                     value="{{ old('data_entrega', now()->addDays(5)->format('Y-m-d')) }}"
                     class="input input-bordered w-full" readonly required>
@@ -38,7 +38,7 @@
 
             <div class="flex justify-end gap-3 mt-8">
                 <a href="{{ route('dashboard') }}"
-                    class="btn btn-outline btn-error hover:text-white transition-colors duration-300">
+                    class="btn btn-outline btn-error transition-colors duration-300">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24"
                         stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

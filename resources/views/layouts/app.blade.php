@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" data-theme="aqua">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" x-data="themeSwitcher()" x-init="initTheme()" :data-theme="theme">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -14,7 +14,7 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
         @livewireStyles
     </head>
-    <body data-theme="aqua" class="bg-base-100 text-base-content font-sans">
+    <body class="bg-base-100 text-base-content font-sans">
         <x-banner />
         <div class="min-h-screen">
             @livewire('navigation-menu')
@@ -36,3 +36,21 @@
         @livewireScripts
     </body>
 </html>
+
+<script>
+  function themeSwitcher() {
+    return {
+      theme: 'light',
+      initTheme() {
+       
+        this.theme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', this.theme);
+      },
+      toggleTheme() {
+        this.theme = this.theme === 'light' ? 'dark' : 'light';
+        localStorage.setItem('theme', this.theme);
+        document.documentElement.setAttribute('data-theme', this.theme);
+      }
+    }
+  }
+</script>
