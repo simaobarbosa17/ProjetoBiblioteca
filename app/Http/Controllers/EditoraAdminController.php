@@ -35,25 +35,21 @@ class EditoraAdminController extends Controller
             'logotipo' => 'nullable|image|max:2048',
         ]);
 
-        $logoPath = null;
+        $logoPath = 'storage/app/public/logo/default.png';
+
         if ($request->hasFile('logotipo')) {
             $filename = uniqid() . '.' . $request->file('logotipo')->getClientOriginalExtension();
-
-
             $request->file('logotipo')->move(storage_path('app/public/logo'), $filename);
-
-
             $logoPath = 'storage/app/public/logo/' . $filename;
-
-            $editora = Editoras::create([
-
-                'nome' => $validated['nome'],
-                'logótipo' => $logoPath,
-
-            ]);
-
         }
-        app('SiteLogger')('Editora', $editora->id, 'Editora Criada ');
+
+        $editora = Editoras::create([
+            'nome' => $validated['nome'],
+            'logótipo' => $logoPath,
+        ]);
+
+        app('SiteLogger')('Editora', $editora->id, 'Editora Criada');
+
         return redirect()->route('admin.editoras')->with('success', 'Editora criado com sucesso!');
     }
 
@@ -81,7 +77,7 @@ class EditoraAdminController extends Controller
     {
         $request->validate([
             'nome' => 'required|string|max:255',
-            'foto' => 'nullable|image|max:2048',
+            'logotipo' => 'nullable|image|max:2048',
         ]);
 
         $editora = Editoras::findOrFail($id);

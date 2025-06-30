@@ -9,17 +9,17 @@ use App\Mail\ReviewEstado;
 
 class AdminReviewController extends Controller
 {
-    // Lista todas as reviews pendentes
+  
     public function index()
     {
         $reviews = Reviews::with(['user', 'livro'])
             ->where('validado', false)
-            ->get();
+            ->paginate(10);
 
         return view('admin.reviews', compact('reviews'));
     }
 
-    // Aprova uma review
+   
     public function aprovar($id)
     {
         $review = Reviews::findOrFail($id);
@@ -27,14 +27,14 @@ class AdminReviewController extends Controller
         $review->justificacao = null;
         $review->save();
 
-        // Envia email para o usuário
+       
         Mail::to($review->user->email)->send(new ReviewEstado($review, true));
 
         app('SiteLogger')('Review', $review->id, 'Review Aprovada ');
         return back()->with('success', 'Review aprovada com sucesso!');
     }
 
-    // Recusa uma review
+   
     public function recusar(Request $request, $id)
     {
         $request->validate([
@@ -46,7 +46,7 @@ class AdminReviewController extends Controller
         $review->justificacao = $request->justificacao;
         $review->save();
 
-        // Envia email para o usuário
+        
         Mail::to($review->user->email)->send(new ReviewEstado($review, false));
         app('SiteLogger')('Review', $review->id, 'Review Recusada ');
         return back()->with('success', 'Review recusada com sucesso!');

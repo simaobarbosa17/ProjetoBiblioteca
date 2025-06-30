@@ -182,7 +182,8 @@ class CarrinhoController extends Controller
 
     public function adminindex()
     {
-        $encomendas = Encomendas::with('user', 'livros')->get();
+        
+        $encomendas = Encomendas::with('user', 'livros')->paginate(10);
         return view('admin.verencomendas', compact('encomendas'));
     }
 

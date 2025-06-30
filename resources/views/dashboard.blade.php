@@ -8,7 +8,6 @@
 
     <div class="py-6">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <!-- Barra de pesquisa -->
             <div class="card bg-base-100 shadow-xl mb-8">
                 <div class="card-body">
                     <form action="{{ route('dashboard') }}" method="GET" class="flex flex-col sm:flex-row gap-4">
@@ -27,7 +26,7 @@
                 </div>
             </div>
 
-            <!-- Estatísticas -->
+           
             <div class="stats shadow mb-8 w-full flex flex-col sm:flex-row sm:space-x-6">
                 <div class="stat w-full sm:w-1/3 mb-4 sm:mb-0">
                     <div class="stat-figure text-primary">
@@ -63,7 +62,7 @@
                 </div>
             </div>
 
-            <!-- Grelha de livros -->
+         
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 @foreach ($livro as $livros)
                     <div class="card bg-base-100 shadow-xl hover:shadow-2xl transition-shadow">
@@ -121,7 +120,6 @@
                 @endforeach
             </div>
 
-            <!-- Paginação -->
             <div class="mt-12 flex justify-center">
                 <div class="join">
                     {{ $livro->links() }}

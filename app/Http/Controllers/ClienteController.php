@@ -16,6 +16,8 @@ class ClienteController extends Controller
      */
     public function index()
     {
+        $requisicao = requesicoes::paginate(10);
+
         $requisicoesAtivas = requesicoes::with(['livro', 'user'])
             ->where('estado', 'ativa')
             ->latest()
@@ -41,7 +43,8 @@ class ClienteController extends Controller
             'totalAtivas',
             'totalDevolvidas',
             'ultimos30dias',
-            'entreguesHoje'
+            'entreguesHoje',
+            'requisicao'
         ));
     }
 

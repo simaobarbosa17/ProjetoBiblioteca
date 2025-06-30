@@ -35,7 +35,7 @@ class EditorasController extends Controller
             $pagatual,
             ['path' => $request->url(), 'query' => $request->query()]
         );
-        $view = $request->is('admin/*') ? 'admin.editoras' : 'editoras';
-        return view($view, ['editora' => $paginacao]);
+    
+        return view('admin.editoras', ['editora' => $paginacao]);
     }
 }

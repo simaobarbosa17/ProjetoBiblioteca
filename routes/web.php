@@ -50,7 +50,7 @@ Route::middleware(['auth', 'admin'])
         Route::delete('/editoras/{editora}', [EditoraAdminController::class, 'destroy'])->name('editoras.destroy');
 
         // Autores
-        Route::get('/autores', [AutoresController::class, 'index'])->name('autores');
+        Route::get('/autores', action: [AutoresController::class, 'index'])->name('autores');
         Route::get('/autores/create', [AutorAdminController::class, 'create'])->name('autores.create');
         Route::post('/autores', [AutorAdminController::class, 'store'])->name('autores.store');
         Route::get('/autores/{autor}/edit', [AutorAdminController::class, 'edit'])->name('autores.edit');
@@ -84,8 +84,8 @@ Route::middleware([
     'verified',
 ])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    //Route::get('/autores', [AutoresController::class, 'index'])->name('autores');
-    //Route::get('/editoras', [EditorasController::class, 'index'])->name('editoras');
+    Route::get('/autores', [AutoresController::class, 'index'])->name('autores');
+    Route::get('/editoras', [EditorasController::class, 'index'])->name('editoras');
     Route::get('/requisicoes/{livro}', [RequesicoesController::class, 'show'])->name('requisicoes.show');
     Route::post('/requisicoes', [RequesicoesController::class, 'store'])->name('requisicoes.store');
     Route::get('/verequesicao', [ClienteController::class, 'show'])->name('verequesicao');

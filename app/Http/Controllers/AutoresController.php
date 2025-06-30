@@ -38,7 +38,7 @@ class AutoresController extends Controller
             $pagatual,
             ['path' => $request->url(), 'query' => $request->query()]
         );
-        $view = $request->is('admin/*') ? 'admin.autores' : 'autores';
-        return view($view, ['autor' => $paginacao]);
+      
+        return view('admin.autores', ['autor' => $paginacao]);
     }
 }

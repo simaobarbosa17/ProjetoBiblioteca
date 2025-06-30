@@ -1,44 +1,95 @@
 <x-app-layout>
+   
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Criar Novo Administrador
-        </h2>
+        <div class="flex items-center justify-between">
+            <h2 class="text-2xl font-bold text-base-content">
+                👤  {{ __('Criar Novo Administrador') }}
+            </h2>
+        </div>
     </x-slot>
+ 
+  
+    <div class="py-6 px-4 max-w-md mx-auto space-y-6">
+        @if (session('success'))
+            <div class="alert alert-success shadow-sm">
+                <span>{{ session('success') }}</span>
+            </div>
+        @endif
 
+        @if ($errors->any())
+            <div class="alert alert-error shadow-sm">
+                <div>
+                    <h3 class="font-bold">Ocorreram erros:</h3>
+                    <ul class="list-disc list-inside text-sm mt-1 space-y-1">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
+        @endif
 
+     
+        <div class="card bg-base-100 shadow">
+            <div class="card-body space-y-4  max-w-md">
+                <form method="POST" action="{{ route('admin.store') }}" class="space-y-4">
+                    @csrf
 
+                  
+                    <div class="form-control">
+                        <label for="email" class="label">
+                            <span class="label-text font-semibold">Email</span>
+                        </label>
+                        <input
+                            id="email"
+                            name="email"
+                            type="email"
+                            value="{{ old('email') }}"
+                            required
+                            autofocus
+                            autocomplete="username"
+                            class="input input-bordered w-full"
+                        />
+                    </div>
 
-    @if (session('success'))
-        <p style="color: green;">{{ session('success') }}</p>
-    @endif
+                    
+                    <div class="form-control">
+                        <label for="password" class="label">
+                            <span class="label-text font-semibold">Password</span>
+                        </label>
+                        <input
+                            id="password"
+                            name="password"
+                            type="password"
+                            required
+                            autocomplete="new-password"
+                            class="input input-bordered w-full"
+                        />
+                    </div>
 
-    <form method="POST" action="{{ route('admin.store') }}">
-        @csrf
+                    
+                    <div class="form-control">
+                        <label for="password_confirmation" class="label">
+                            <span class="label-text font-semibold">Confirmar Password</span>
+                        </label>
+                        <input
+                            id="password_confirmation"
+                            name="password_confirmation"
+                            type="password"
+                            required
+                            class="input input-bordered w-full"
+                        />
+                    </div>
 
-        <div>
-            <x-label for="email" value="{{ __('Email') }}" />
-            <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required
-                autofocus autocomplete="username" />
+                  
+                    <div class="form-control mt-2">
+                        <button type="submit" class="btn btn-primary w-full">
+                            Criar Admin
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
 
-        <div class="mt-4">
-            <x-label for="password" value="{{ __('Password') }}" />
-            <x-input id="password" class="block mt-1 w-full" type="password" name="password" required
-                autocomplete="current-password" />
-        </div>
-
-        <div class="mt-4">
-            <x-label for="password_confirmation" value="{{ __('Confirmar Password') }}" />
-            <x-input id="password_confirmation" class="block mt-1 w-full" type="password" name="password_confirmation"
-                required />
-        </div>
-        <div class="flex items-center justify-end mt-4">
-
-            <x-button class="ms-4">
-                {{ __('Criar Admin') }}
-            </x-button>
-        </div>
-    </form>
-
-
+    </div>
 </x-app-layout>

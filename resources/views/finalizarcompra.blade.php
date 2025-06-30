@@ -31,7 +31,7 @@
                 <div class="mb-4">
                     <label for="morada" class="block font-medium text-sm">Morada de Entrega</label>
                     <textarea id="morada" name="morada" rows="3" required
-                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">{{ old('morada') }}</textarea>
+                        class="mt-1 block w-full border-gray-700 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">{{ old('morada') }}</textarea>
                 </div>
                 @if(session('erro'))
                     <div class="mb-4 p-4 bg-red-100 text-red-700 rounded">
@@ -39,7 +39,7 @@
                     </div>
                 @endif
                 <button type="submit"
-                        class="btn btn-primary text-black px-6 py-2 rounded shadow font-medium">
+                        class="btn btn-primary  px-6 py-2 rounded shadow font-medium">
                     Pagar 
                 </button>
             </form>

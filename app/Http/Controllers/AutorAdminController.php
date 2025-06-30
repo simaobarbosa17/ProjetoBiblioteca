@@ -34,28 +34,24 @@ class AutorAdminController extends Controller
             'foto' => 'nullable|image|max:2048',
         ]);
 
-        $fotoPath = null;
+       
+        $fotoPath = 'storage/app/public/autor/default.png';
+
         if ($request->hasFile('foto')) {
             $filename = uniqid() . '.' . $request->file('foto')->getClientOriginalExtension();
-
-
             $request->file('foto')->move(storage_path('app/public/autor'), $filename);
-
-
             $fotoPath = 'storage/app/public/autor/' . $filename;
-
-            $autor = Autores::create([
-
-                'nome' => $validated['nome'],
-                'foto' => $fotoPath,
-
-            ]);
         }
+
+        $autor = Autores::create([
+            'nome' => $validated['nome'],
+            'foto' => $fotoPath,
+        ]);
+
         app('SiteLogger')('Autor', $autor->id, 'Autor Criado ');
 
         return redirect()->route('admin.autores')->with('success', 'Autor criado com sucesso!');
     }
-
     /**
      * Display the specified resource.
      */

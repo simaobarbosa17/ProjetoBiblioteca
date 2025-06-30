@@ -51,19 +51,17 @@ class LivroController extends Controller
             'stock' => 'required|numeric|min:0',
         ]);
 
-
-        $capaPath = null;
+        
         if ($request->hasFile('capa')) {
             $filename = uniqid() . '.' . $request->file('capa')->getClientOriginalExtension();
-
-
             $request->file('capa')->move(storage_path('app/public/capas'), $filename);
-
-
             $capaPath = 'storage/capas/' . $filename;
-
+        } else {
+           
+            $capaPath = 'storage/capas/livro1.png';
         }
 
+     
         $livro = Livros::create([
             'isbn' => $validated['isbn'],
             'nome' => $validated['nome'],
@@ -74,9 +72,11 @@ class LivroController extends Controller
             'stock' => $validated['stock'],
         ]);
 
-
+       
         $livro->autores()->sync($validated['autor_ids']);
-        app('SiteLogger')('Livro', $livro->id, 'Livro Criado ');
+
+       
+        app('SiteLogger')('Livro', $livro->id, 'Livro Criado');
         return redirect()->route('admin.dashboard')->with('success', 'Livro criado com sucesso!');
     }
 
@@ -86,7 +86,16 @@ class LivroController extends Controller
     public function show($livroId)
     {
         $livro = Livros::with(['editora', 'requesicoes.user'])->findOrFail($livroId);
-        return view('admin.detalhelivroadmin', compact('livro'));
+        $todosLivros = Livros::all()->except($livro->id);
+        $descrBase = $this->limparTexto($livro->bibliografia);
+        $relacionados = $todosLivros->map(function ($outro) use ($descrBase) {
+            $descrOutro = $this->limparTexto($outro->bibliografia);
+            $similaridade = $this->calcularSimilaridade($descrBase, $descrOutro);
+            $outro->similaridade = $similaridade;
+            return $outro;
+        })->sortByDesc('similaridade')->take(3);
+
+        return view('admin.detalhelivroadmin', compact('livro', 'relacionados'));
 
     }
 
@@ -255,5 +264,21 @@ class LivroController extends Controller
             Log::error('Erro ao importar livro: ' . $e->getMessage(), ['exception' => $e]);
             return back()->with('error', 'Erro ao importar: ' . $e->getMessage());
         }
+    }
+    private function limparTexto($texto)
+    {
+        return collect(explode(' ', strtolower(strip_tags($texto))))
+            ->reject(fn($word) => in_array($word, ['de', 'a', 'o', 'e', 'em', 'um', 'para', 'com', 'do', 'na', 'no', 'por', 'que', 'as', 'os']))
+            ->map(fn($w) => trim(preg_replace('/[^a-z0-9]/', '', $w)))
+            ->filter()
+            ->values()
+            ->toArray();
+    }
+
+    private function calcularSimilaridade(array $base, array $comparar)
+    {
+        $intersecao = array_intersect($base, $comparar);
+        $union = array_unique(array_merge($base, $comparar));
+        return count($union) > 0 ? count($intersecao) / count($union) : 0;
     }
 }

@@ -48,7 +48,7 @@ class Pagamento extends Controller
                     $item->delete();
                 }
             }
-            app('SiteLogger')('Livro', $livro->id, 'Livro Comprado ');
+            app('SiteLogger')('Livro', $encomendaId, 'Livro Comprado ');
             return view('pagamento-sucesso');
         }
 
