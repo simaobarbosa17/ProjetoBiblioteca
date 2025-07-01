@@ -102,7 +102,11 @@
                             
                             <div class="flex items-center justify-between mt-4">
                                 <div class="text-2xl font-bold text-primary">€{{ $livros->preco }}</div>
-                                <div class="badge badge-secondary">Disponível</div>
+                                @if ($livros->stock > 0)
+                                    <div class="badge badge-secondary">Disponível</div>
+                                @else
+                                    <div class="badge badge-secondary">Indisponível</div>
+                                @endif
                             </div>
 
                             <div class="card-actions justify-between mt-6">

@@ -13,11 +13,8 @@ A sua requisição de livro foi registrada com sucesso!
 
 ---
 
-@if($requisicao->livro->capa)
-    <img src="{{ Storage::url($requisicao->livro->capa) }}" alt="Capa do Livro" style="max-width: 100%; height: auto;">
-@endif
 
-<x-mail::button :url="route('verequesicao')">
+<x-mail::button :url="route('requisicoes.show',$requisicao->user->id)">
 Ver Minhas Requisições
 </x-mail::button>
 

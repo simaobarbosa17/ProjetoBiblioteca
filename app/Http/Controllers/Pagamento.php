@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Stripe\Stripe;
 use Stripe\Checkout\Session;
+use App\Mail\LivroCompradoMail;
+use Illuminate\Support\Facades\Mail;
+use App\Models\User;
+use App\Mail\LivroCompradoAdminMail;
 
 class Pagamento extends Controller
 {
@@ -46,6 +50,13 @@ class Pagamento extends Controller
 
 
                     $item->delete();
+                }
+                Mail::to($encomenda->user->email)->send(new LivroCompradoMail($encomenda));
+
+               
+                $admins = User::where('role', 'admin')->pluck('email');
+                foreach ($admins as $adminEmail) {
+                    Mail::to($adminEmail)->send(new LivroCompradoAdminMail($encomenda));
                 }
             }
             app('SiteLogger')('Livro', $encomendaId, 'Livro Comprado ');

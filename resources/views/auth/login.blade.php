@@ -26,7 +26,7 @@
                         </div>
                     @endsession
 
-                    <!-- Erros de Validação -->
+                    
                     @if ($errors->any())
                         <div class="alert alert-error mb-4">
                             <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-5 w-5" fill="none" viewBox="0 0 24 24">
@@ -43,7 +43,7 @@
                     <form method="POST" action="{{ route('login') }}" class="space-y-4">
                         @csrf
 
-                        <!-- Campo de Email -->
+                        
                         <div class="form-control">
                             <label class="label" for="email">
                                 <span class="label-text font-medium">Email</span>
